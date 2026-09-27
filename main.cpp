@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -18,20 +19,15 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    // -------------------------------------------------
     // TOO MANY ARGUMENTS
-    // -------------------------------------------------
-
     if (argc > 4)
     {
-        cout << "Too many arguments. Cannot pass in more than three." << endl;
-        return -1;
+        cout << "Too many arguments. Cannot pass in more than three."
+             << endl;
+        return 0;
     }
 
-    // -------------------------------------------------
     // VARIABLES
-    // -------------------------------------------------
-
     double loan_amount = 0.0;
     double yearly_interest_rate = 0.0;
     double monthly_payment = 0.0;
@@ -48,10 +44,7 @@ int main(int argc, char* argv[])
 
     double arguments[3] = {0.0, 0.0, 0.0};
 
-    // -------------------------------------------------
     // CONVERT COMMAND-LINE ARGUMENTS
-    // -------------------------------------------------
-
     int i = 1;
 
     while (i < argc)
@@ -81,20 +74,17 @@ int main(int argc, char* argv[])
                      << argv[i] << endl;
             }
 
-            return -2;
+            return 0;
         }
 
         i++;
     }
 
-    // -------------------------------------------------
     // VALIDATE LOAN
-    // -------------------------------------------------
-
     if (argc < 2)
     {
         cout << "(Invalid loan amount)" << endl;
-        return -2;
+        return 0;
     }
 
     loan_amount = arguments[0];
@@ -103,18 +93,15 @@ int main(int argc, char* argv[])
     {
         cout << "(Invalid loan amount): "
              << loan_amount << endl;
-        return -2;
+        return 0;
     }
 
-    // -------------------------------------------------
     // VALIDATE INTEREST RATE
-    // -------------------------------------------------
-
     if (argc < 3)
     {
         cout << "(Invalid interest rate): "
              << loan_amount << endl;
-        return -2;
+        return 0;
     }
 
     yearly_interest_rate = arguments[1];
@@ -124,19 +111,16 @@ int main(int argc, char* argv[])
         cout << "(Invalid interest rate): "
              << loan_amount << " "
              << yearly_interest_rate << endl;
-        return -2;
+        return 0;
     }
 
-    // -------------------------------------------------
     // VALIDATE PAYMENT
-    // -------------------------------------------------
-
     if (argc < 4)
     {
         cout << "(Invalid payment): "
              << loan_amount << " "
              << yearly_interest_rate << endl;
-        return -2;
+        return 0;
     }
 
     monthly_payment = arguments[2];
@@ -147,19 +131,13 @@ int main(int argc, char* argv[])
              << loan_amount << " "
              << yearly_interest_rate << " "
              << monthly_payment << endl;
-        return -2;
+        return 0;
     }
 
-    // -------------------------------------------------
     // CURRENCY FORMATTING
-    // -------------------------------------------------
-
     cout << fixed << setprecision(2);
 
-    // -------------------------------------------------
     // DISPLAY INPUT
-    // -------------------------------------------------
-
     cout << "Loan Amount: " << loan_amount << endl;
     cout << "Interest Rate (% per year): "
          << yearly_interest_rate << endl;
@@ -167,37 +145,27 @@ int main(int argc, char* argv[])
          << monthly_payment << endl;
     cout << endl;
 
-    // -------------------------------------------------
     // MONTHLY INTEREST RATE
-    // -------------------------------------------------
-
     monthly_rate_percent = yearly_interest_rate / 12.0;
     monthly_interest_rate = monthly_rate_percent / 100.0;
 
-    // -------------------------------------------------
     // CHECK FOR INSUFFICIENT PAYMENT
-    // -------------------------------------------------
-
     interest = loan_amount * monthly_interest_rate;
 
     if (monthly_payment <= interest)
     {
         cout << "Monthly payment is insufficient." << endl;
-        return -3;
+        return 0;
     }
 
-    // -------------------------------------------------
     // AMORTIZATION TABLE
-    // -------------------------------------------------
-
     cout << "*****************************************************************\n";
     cout << "\t\tAmortization Table\n";
     cout << "*****************************************************************\n";
     cout << "Month\tBalance\t\tPayment\tRate\tInterest\tPrincipal\n";
 
     // Month 0
-    cout << current_month << "\t$"
-         << loan_amount;
+    cout << current_month << "\t$" << loan_amount;
 
     if (loan_amount < 1000)
     {
@@ -206,10 +174,7 @@ int main(int argc, char* argv[])
 
     cout << "\tN/A\tN/A\tN/A\t\tN/A\n";
 
-    // -------------------------------------------------
     // LOOP THROUGH EACH MONTH
-    // -------------------------------------------------
-
     while (loan_amount > 0)
     {
         current_month++;
@@ -226,22 +191,18 @@ int main(int argc, char* argv[])
 
             loan_amount = 0;
         }
-
         // Regular payment
         else
         {
             payment = monthly_payment;
-
             principal = payment - interest;
-
             loan_amount = loan_amount - principal;
 
             total_interest += interest;
         }
 
         // Print current month
-        cout << current_month << "\t$"
-             << loan_amount;
+        cout << current_month << "\t$" << loan_amount;
 
         if (loan_amount < 1000)
         {
@@ -255,10 +216,7 @@ int main(int argc, char* argv[])
              << endl;
     }
 
-    // -------------------------------------------------
     // FINAL RESULTS
-    // -------------------------------------------------
-
     cout << "****************************************************************\n";
 
     cout << "\nIt takes "
