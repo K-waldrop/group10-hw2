@@ -3,8 +3,8 @@
  * AUTHOR:
  * DESCRIPTION:
  * Calculates a loan amortization schedule using a loan amount,
- * yearly interest rate, and monthly payment passed through the
- * command line.
+ * yearly interest rate, and monthly payment passed through
+ * command-line arguments.
  */
 
 #include <iostream>
@@ -13,14 +13,13 @@
 
 using namespace std;
 
-// Pass in space-delimited arguments when calling the executable.
 // Example:
 // ./a.out 1000 18 50
 
 int main(int argc, char* argv[])
 {
     // -------------------------------------------------
-    // CHECK NUMBER OF ARGUMENTS
+    // TOO MANY ARGUMENTS
     // -------------------------------------------------
 
     if (argc > 4)
@@ -38,6 +37,8 @@ int main(int argc, char* argv[])
     double monthly_payment = 0.0;
 
     double monthly_interest_rate;
+    double monthly_rate_percent;
+
     double interest;
     double principal;
     double total_interest = 0.0;
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
     double arguments[3] = {0.0, 0.0, 0.0};
 
     // -------------------------------------------------
-    // CONVERT COMMAND LINE ARGUMENTS TO NUMBERS
+    // CONVERT COMMAND-LINE ARGUMENTS
     // -------------------------------------------------
 
     int i = 1;
@@ -87,22 +88,16 @@ int main(int argc, char* argv[])
     }
 
     // -------------------------------------------------
-    // MAKE SURE ALL THREE ARGUMENTS WERE PROVIDED
+    // VALIDATE LOAN
     // -------------------------------------------------
 
-    if (argc != 4)
+    if (argc < 2)
     {
-        cout << "Usage: ./a.out <loan> <interest rate> <monthly payment>" << endl;
-        return -1;
+        cout << "(Invalid loan amount)" << endl;
+        return -2;
     }
 
     loan_amount = arguments[0];
-    yearly_interest_rate = arguments[1];
-    monthly_payment = arguments[2];
-
-    // -------------------------------------------------
-    // VALIDATE NUMERIC VALUES
-    // -------------------------------------------------
 
     if (loan_amount <= 0)
     {
@@ -111,6 +106,19 @@ int main(int argc, char* argv[])
         return -2;
     }
 
+    // -------------------------------------------------
+    // VALIDATE INTEREST RATE
+    // -------------------------------------------------
+
+    if (argc < 3)
+    {
+        cout << "(Invalid interest rate): "
+             << loan_amount << endl;
+        return -2;
+    }
+
+    yearly_interest_rate = arguments[1];
+
     if (yearly_interest_rate < 0)
     {
         cout << "(Invalid interest rate): "
@@ -118,6 +126,20 @@ int main(int argc, char* argv[])
              << yearly_interest_rate << endl;
         return -2;
     }
+
+    // -------------------------------------------------
+    // VALIDATE PAYMENT
+    // -------------------------------------------------
+
+    if (argc < 4)
+    {
+        cout << "(Invalid payment): "
+             << loan_amount << " "
+             << yearly_interest_rate << endl;
+        return -2;
+    }
+
+    monthly_payment = arguments[2];
 
     if (monthly_payment <= 0)
     {
@@ -146,10 +168,10 @@ int main(int argc, char* argv[])
     cout << endl;
 
     // -------------------------------------------------
-    // CONVERT YEARLY RATE TO MONTHLY DECIMAL RATE
+    // MONTHLY INTEREST RATE
     // -------------------------------------------------
 
-    double monthly_rate_percent = yearly_interest_rate / 12.0;
+    monthly_rate_percent = yearly_interest_rate / 12.0;
     monthly_interest_rate = monthly_rate_percent / 100.0;
 
     // -------------------------------------------------
@@ -194,10 +216,7 @@ int main(int argc, char* argv[])
 
         interest = loan_amount * monthly_interest_rate;
 
-        // ---------------------------------------------
-        // FINAL PAYMENT
-        // ---------------------------------------------
-
+        // Final payment
         if (loan_amount + interest <= monthly_payment)
         {
             payment = loan_amount + interest;
@@ -208,10 +227,7 @@ int main(int argc, char* argv[])
             loan_amount = 0;
         }
 
-        // ---------------------------------------------
-        // NORMAL PAYMENT
-        // ---------------------------------------------
-
+        // Regular payment
         else
         {
             payment = monthly_payment;
@@ -223,10 +239,7 @@ int main(int argc, char* argv[])
             total_interest += interest;
         }
 
-        // ---------------------------------------------
-        // PRINT THIS MONTH
-        // ---------------------------------------------
-
+        // Print current month
         cout << current_month << "\t$"
              << loan_amount;
 
